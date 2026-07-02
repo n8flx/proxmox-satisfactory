@@ -32,12 +32,12 @@ EOF
   exit 1
 }
 
-VMID=${1:-}
-if [ -z "$VMID" ] || [ "$VMID" = "auto" ]; then
-  VMID=""
-  shift || true
-elif [[ "$VMID" =~ ^[0-9]+$ ]]; then
-  shift || true
+VMID=""
+if [ "${1:-}" = "auto" ]; then
+  shift
+elif [[ "${1:-}" =~ ^[0-9]+$ ]]; then
+  VMID=$1
+  shift
 fi
 
 CT_NAME=${1:-satisfactory}
@@ -45,7 +45,7 @@ STORAGE=${2:-$DEFAULT_STORAGE}
 NET_BRIDGE=${3:-vmbr0}
 CT_IP=${4:-dhcp} # e.g. 192.168.1.50/24 or 'dhcp'
 
-if [ -z "$VMID" ] || [ "$VMID" = "auto" ]; then
+if [ -z "$VMID" ]; then
   if command -v pvesh >/dev/null 2>&1; then
     VMID=$(pvesh get /cluster/nextid)
   else
@@ -68,10 +68,14 @@ echo "Creating LXC $VMID with hostname $CT_NAME on storage $STORAGE"
 # choose a Debian template (prefer debian-12 then debian-11)
 echo "Updating template index..."
 pveam update >/dev/null
-TEMPLATE=$(pveam available | tr -s '[:space:]' '\n' | grep -E '^debian-[0-9]+-standard' | awk '/debian-12-standard/ {print; exit} /debian-11-standard/ {if (!best) best=$0} END { if (!best && NF) best=$0; if (best) print best }')
+AVAILABLE_TEMPLATES=$(pveam available | tr -s '[:space:]' '\n' | grep -E '^debian-[0-9]+-standard' || true)
+TEMPLATE=$(printf '%s\n' "$AVAILABLE_TEMPLATES" | grep '^debian-12-standard' | head -n 1 || true)
+if [ -z "$TEMPLATE" ]; then
+  TEMPLATE=$(printf '%s\n' "$AVAILABLE_TEMPLATES" | grep '^debian-11-standard' | head -n 1 || true)
+fi
 if [ -z "$TEMPLATE" ]; then
   # fallback: take first Debian template if output format is different
-  TEMPLATE=$(pveam available | tr -s '[:space:]' '\n' | grep -E '^debian-[0-9]+-standard' | head -n 1)
+  TEMPLATE=$(printf '%s\n' "$AVAILABLE_TEMPLATES" | head -n 1)
 fi
 
 if [ -z "$TEMPLATE" ]; then
@@ -81,7 +85,7 @@ fi
 
 echo "Using template: $TEMPLATE"
 echo "Downloading template to local storage (if needed)..."
-pveam download local $TEMPLATE
+pveam download local "$TEMPLATE"
 
 echo "Creating container..."
 
