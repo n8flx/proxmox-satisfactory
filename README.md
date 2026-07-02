@@ -52,8 +52,8 @@ The game also rotates its own logs below:
 /opt/satisfactory/server/FactoryGame/Saved/Logs
 ```
 
-Use the Community Scripts update action to validate and update App ID
-`1690800`. The server is stopped during the update and restarted afterward.
+Use the Community Scripts update action to back up the server data, validate
+and update App ID `1690800`, restore the data and restart the server.
 
 Add the container address in Satisfactory's **Server Manager** using port
 `7777`, then claim and configure the server there.
