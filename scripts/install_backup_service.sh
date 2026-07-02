@@ -24,8 +24,10 @@ SRC_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
 echo "Using repo source: $SRC_DIR"
 
-# Copy backup script
+# Copy create script and backup script
 mkdir -p /usr/local/bin
+cp -v "$SRC_DIR/scripts/create_satisfactory_lxc.sh" /usr/local/bin/create_satisfactory_lxc.sh
+chmod 755 /usr/local/bin/create_satisfactory_lxc.sh
 cp -v "$SRC_DIR/examples/lxc-backup.sh" /usr/local/bin/lxc-backup.sh
 chmod 755 /usr/local/bin/lxc-backup.sh
 
@@ -39,6 +41,6 @@ systemctl daemon-reload
 # Enable and start timer for the VMID
 systemctl enable --now lxc-backup@${VMID}.timer
 
-echo "Installed backup script and enabled lxc-backup@${VMID}.timer"
+echo "Installed create and backup scripts, and enabled lxc-backup@${VMID}.timer"
 
 exit 0
