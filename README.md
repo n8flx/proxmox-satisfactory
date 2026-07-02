@@ -50,18 +50,21 @@ The files follow the current
 | --- | --- |
 | `ct/satisfactory.sh` | Proxmox host entry point, container defaults and update action |
 | `install/satisfactory-install.sh` | Installation performed inside the LXC |
+| `json/satisfactory.json` | Website metadata required by the current ProxmoxVED PR template |
 
 New scripts must first be submitted to the
 [ProxmoxVED development repository](https://github.com/community-scripts/ProxmoxVED).
 They should not be submitted directly to the production `ProxmoxVE`
-repository. Website metadata is submitted through the separate site/backend
-workflow and must not be added to the script PR.
+repository. Although the website guide describes a separate metadata
+workflow, the current ProxmoxVED repository template and automated validator
+still require the matching top-level JSON file.
 
 The clean submission branch must contain only:
 
 ```text
 ct/satisfactory.sh
 install/satisfactory-install.sh
+json/satisfactory.json
 ```
 
 The contribution must be tested from a personal ProxmoxVED fork using the
@@ -75,7 +78,10 @@ The current Community Scripts contribution guide states that new
 closed-source applications are not accepted. Satisfactory and its dedicated
 server are proprietary Steam content, so acceptance requires an explicit
 exception from the Community Scripts maintainers before opening a pull
-request.
+request. It also has no public GitHub repository with 600 or more stars and
+is distributed through SteamCMD instead of official release tarballs; the
+automated ProxmoxVED validator therefore closes the submission for unmet
+application requirements.
 
 ## Defaults
 
@@ -117,8 +123,8 @@ Add the container address in Satisfactory's **Server Manager** using port
 ## Legacy standalone installer
 
 The earlier standalone implementation remains available under
-`scripts/create_satisfactory_lxc.sh`. The files in `ct/` and `install/` are
-the versions prepared for a Community Scripts contribution.
+`scripts/create_satisfactory_lxc.sh`. The files in `ct/`, `install/` and
+`json/` are the versions prepared for a Community Scripts contribution.
 
 ## License
 
