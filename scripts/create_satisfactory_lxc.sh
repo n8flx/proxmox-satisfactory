@@ -193,6 +193,8 @@ WorkingDirectory=/home/satisfactory
 ExecStart=/home/satisfactory/start_satisfactory.sh
 Restart=on-failure
 RestartSec=5
+StandardOutput=journal+console
+StandardError=journal+console
 
 [Install]
 WantedBy=multi-user.target

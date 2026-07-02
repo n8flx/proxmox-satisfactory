@@ -53,6 +53,7 @@ Nach der Ausführung:
 
 - Service prüfen: `pct exec <VMID> -- systemctl status satisfactory`
 - Logs: `pct exec <VMID> -- journalctl -u satisfactory -f`
+- Die Serverausgabe erscheint zusätzlich direkt auf der LXC-Konsole.
 
 Hinweis:
 
