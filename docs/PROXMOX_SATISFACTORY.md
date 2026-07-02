@@ -8,16 +8,28 @@ Datei: `scripts/create_satisfactory_lxc.sh`
 
 Kurzanleitung:
 
-- Auf Proxmox-Host als `root` ausführen:
+- Klone oder kopiere das Git-Repository auf den Proxmox-Host und wechsle in das Repo-Verzeichnis:
+
+```bash
+cd /pfad/zum/proxmox-satisfactory
+```
+
+- Führe das Skript als `root` aus:
 
 ```bash
 bash scripts/create_satisfactory_lxc.sh 101 satisfactory local-lvm vmbr0 dhcp
 ```
 
+- Alternativ mit absolutem Repo-Pfad:
+
+```bash
+bash /pfad/zum/proxmox-satisfactory/scripts/create_satisfactory_lxc.sh 101 satisfactory local-lvm vmbr0 dhcp
+```
+
 - Für statische IP:
 
 ```bash
-bash scripts/create_satisfactory_lxc.sh 101 satisfactory local-lvm vmbr0 192.168.1.50/24
+bash /pfad/zum/proxmox-satisfactory/scripts/create_satisfactory_lxc.sh 101 satisfactory local-lvm vmbr0 192.168.1.50/24
 ```
 
 - Standard-Netz: `vmbr0` (DHCP) wenn kein IP-Argument angegeben wird.
