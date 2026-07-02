@@ -46,6 +46,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/n8flx/proxmox-satisfactory/m
 
 - Standard-Netz: `vmbr0` (DHCP) wenn kein IP-Argument angegeben wird.
 - Standard-Speicher: `local-lvm`. Ändere den dritten Parameter, wenn du anderes Storage nutzen willst.
+- Das Skript fragt interaktiv nach einem optionalen Root-Passwort für die Container-Konsole. Eine leere Eingabe lässt die Passwort-Anmeldung deaktiviert.
 - Prüfe `STEAM_APPID` in der Skript-Datei, falls die Installation fehlschlägt.
 
 Nach der Ausführung:

@@ -63,6 +63,37 @@ if [ "$EUID" -ne 0 ]; then
   exit 3
 fi
 
+ROOT_PASSWORD=""
+if [ -c /dev/tty ]; then
+  while true; do
+    printf "Root password for the container (leave empty to disable password login): " >/dev/tty
+    if ! IFS= read -r -s ROOT_PASSWORD </dev/tty; then
+      ROOT_PASSWORD=""
+      echo >/dev/tty
+      break
+    fi
+    echo >/dev/tty
+
+    if [ -z "$ROOT_PASSWORD" ]; then
+      break
+    fi
+
+    printf "Confirm root password: " >/dev/tty
+    if ! IFS= read -r -s ROOT_PASSWORD_CONFIRM </dev/tty; then
+      ROOT_PASSWORD=""
+      echo >/dev/tty
+      break
+    fi
+    echo >/dev/tty
+
+    if [ "$ROOT_PASSWORD" = "$ROOT_PASSWORD_CONFIRM" ]; then
+      break
+    fi
+
+    echo "Passwords do not match. Please try again." >/dev/tty
+  done
+fi
+
 echo "Creating LXC $VMID with hostname $CT_NAME on storage $STORAGE"
 
 # Choose a Debian template (prefer Debian 13 "Trixie", then Debian 12).
@@ -110,6 +141,12 @@ pct start "$VMID"
 
 echo "Waiting for container to finish initialization..."
 sleep 5
+
+if [ -n "$ROOT_PASSWORD" ]; then
+  echo "Setting container root password..."
+  printf 'root:%s\n' "$ROOT_PASSWORD" | pct exec "$VMID" -- chpasswd
+fi
+unset ROOT_PASSWORD ROOT_PASSWORD_CONFIRM
 
 run_in_ct() {
   pct exec "$VMID" -- bash -lc "$1"
