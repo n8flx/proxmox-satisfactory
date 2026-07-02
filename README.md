@@ -5,6 +5,42 @@ the official Satisfactory Dedicated Server in a Debian 13 LXC on Proxmox VE.
 It installs the server with SteamCMD, creates a systemd service, exposes live
 logs on the LXC console and provides an integrated update action.
 
+## Install
+
+To create a Satisfactory LXC, run the following command in the Proxmox VE
+Shell:
+
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/n8flx/proxmox-satisfactory/main/bootstrap.sh)" -- auto satisfactory local-lvm vmbr0 dhcp
+```
+
+The command downloads and executes the standalone installer from this
+repository. It:
+
+- selects the next available container ID;
+- creates a Debian 13 LXC named `satisfactory`, falling back to Debian 12 if
+  the Trixie template is unavailable;
+- uses `local-lvm` for its 20 GiB root disk and `vmbr0` with DHCP;
+- optionally sets a root password for console login;
+- installs SteamCMD and Satisfactory Dedicated Server App ID `1690800`;
+- creates and starts the `satisfactory.service`;
+- enables the update timer and writes logs to both journald and the LXC
+  console.
+
+Review the downloaded script before execution when required by your security
+policy. The storage, bridge and IP parameters can be changed at the end of the
+command.
+
+If the helper is accepted and published by Community Scripts, its official
+installation command will be:
+
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/ct/satisfactory.sh)"
+```
+
+That future URL does not work until the contribution has been accepted and
+deployed to `community-scripts/ProxmoxVE`.
+
 ## Community Scripts submission files
 
 The files follow the current
