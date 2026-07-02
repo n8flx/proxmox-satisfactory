@@ -15,19 +15,21 @@ STEAM_APPID="1690800"
 
 usage() {
   cat <<EOF
-Usage: $0 [VMID] [CT_NAME] [STORAGE]
+Usage: $0 VMID [CT_NAME] [STORAGE] [BRIDGE] [IP]
   VMID     : numeric CT ID (z.B. 101)
   CT_NAME  : hostname / container name (z.B. satisfactory)
   STORAGE  : Proxmox storage name for rootfs (default: $DEFAULT_STORAGE)
+  BRIDGE   : bridge interface (default: vmbr0)
+  IP       : DHCP or static address (z.B. 192.168.1.50/24)
 
-The script must auf dem Proxmox-Host als root ausgeführt werden.
+Example:
+  $0 101 satisfactory local-lvm vmbr0 dhcp
+  $0 102 satisfactory local-lvm vmbr0 192.168.1.50/24
+
+The script must be executed on the Proxmox host as root.
 EOF
   exit 1
 }
-
-if [ "$#" -lt 1 ]; then
-  echo "Interactive mode: please provide values."
-fi
 
 VMID=${1:-}
 CT_NAME=${2:-satisfactory}
@@ -36,17 +38,8 @@ NET_BRIDGE=${4:-vmbr0}
 CT_IP=${5:-dhcp} # e.g. 192.168.1.50/24 or 'dhcp'
 
 if [ -z "$VMID" ]; then
-  read -rp "Enter VMID (numeric, e.g. 101): " VMID
-fi
-
-if [ -z "$NET_BRIDGE" ]; then
-  read -rp "Enter bridge to use (default vmbr0): " NET_BRIDGE
-  NET_BRIDGE=${NET_BRIDGE:-vmbr0}
-fi
-
-if [ -z "$CT_IP" ]; then
-  read -rp "Enter container IP (e.g. 192.168.1.50/24) or 'dhcp' [dhcp]: " CT_IP
-  CT_IP=${CT_IP:-dhcp}
+  echo "Missing VMID." >&2
+  usage
 fi
 
 if ! [[ "$VMID" =~ ^[0-9]+$ ]]; then

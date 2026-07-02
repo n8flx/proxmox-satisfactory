@@ -11,11 +11,16 @@ Kurzanleitung:
 - Auf Proxmox-Host als `root` ausführen:
 
 ```bash
-bash scripts/create_satisfactory_lxc.sh 101 satisfactory local-lvm
+bash scripts/create_satisfactory_lxc.sh 101 satisfactory local-lvm vmbr0 dhcp
 ```
 
-- Der Script fragt interaktiv nach fehlenden Parametern.
-- Standard-Netz: `vmbr0` (DHCP). Passe `--net0` in der Skript-Datei an, falls notwendig.
+- Für statische IP:
+
+```bash
+bash scripts/create_satisfactory_lxc.sh 101 satisfactory local-lvm vmbr0 192.168.1.50/24
+```
+
+- Standard-Netz: `vmbr0` (DHCP) wenn kein IP-Argument angegeben wird.
 - Standard-Speicher: `local-lvm`. Ändere den dritten Parameter, wenn du anderes Storage nutzen willst.
 - Prüfe `STEAM_APPID` in der Skript-Datei, falls die Installation fehlschlägt.
 
