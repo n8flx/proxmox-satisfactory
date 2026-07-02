@@ -26,10 +26,16 @@ bash scripts/create_satisfactory_lxc.sh 101 satisfactory local-lvm vmbr0 dhcp
 bash /pfad/zum/proxmox-satisfactory/scripts/create_satisfactory_lxc.sh 101 satisfactory local-lvm vmbr0 dhcp
 ```
 
+- Oder direkt als Bootstrap-Download:
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/n8flx/proxmox-satisfactory/main/bootstrap.sh) 101 satisfactory local-lvm vmbr0 dhcp
+```
+
 - Für statische IP:
 
 ```bash
-bash /pfad/zum/proxmox-satisfactory/scripts/create_satisfactory_lxc.sh 101 satisfactory local-lvm vmbr0 192.168.1.50/24
+bash <(curl -fsSL https://raw.githubusercontent.com/n8flx/proxmox-satisfactory/main/bootstrap.sh) 101 satisfactory local-lvm vmbr0 192.168.1.50/24
 ```
 
 - Standard-Netz: `vmbr0` (DHCP) wenn kein IP-Argument angegeben wird.
