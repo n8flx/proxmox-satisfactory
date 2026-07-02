@@ -125,7 +125,7 @@ echo "Installing SteamCMD into /home/satisfactory/steamcmd..."
 run_in_ct "su -s /bin/bash -l satisfactory -c 'cd ~/steamcmd && wget -qO- https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz | tar zxvf -'"
 
 echo "Installing Satisfactory Dedicated Server (app $STEAM_APPID)..."
-run_in_ct "su -s /bin/bash -l satisfactory -c '~/steamcmd/steamcmd.sh +login anonymous +force_install_dir ~/satisfactory-dedicated +app_update $STEAM_APPID validate +quit'"
+run_in_ct "su -s /bin/bash -l satisfactory -c '~/steamcmd/steamcmd.sh +force_install_dir ~/satisfactory-dedicated +login anonymous +app_update $STEAM_APPID validate +quit'"
 
 echo "Creating start script and systemd service inside container..."
 run_in_ct "cat > /home/satisfactory/start_satisfactory.sh <<'EOF'
@@ -165,7 +165,7 @@ echo "Creating update script and systemd timer (daily)..."
 run_in_ct "cat > /usr/local/bin/update_satisfactory.sh <<'EOF'
 #!/usr/bin/env bash
 set -e
-su -s /bin/bash -l satisfactory -c '~/steamcmd/steamcmd.sh +login anonymous +force_install_dir ~/satisfactory-dedicated +app_update $STEAM_APPID +quit'
+su -s /bin/bash -l satisfactory -c '~/steamcmd/steamcmd.sh +force_install_dir ~/satisfactory-dedicated +login anonymous +app_update $STEAM_APPID +quit'
 systemctl --no-block restart satisfactory.service || true
 EOF
 chmod +x /usr/local/bin/update_satisfactory.sh"
