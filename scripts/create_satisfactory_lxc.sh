@@ -33,11 +33,10 @@ EOF
 }
 
 VMID=${1:-}
-if [ -n "$VMID" ] && [[ ! "$VMID" =~ ^[0-9]+$ ]] && [ "$VMID" != "auto" ]; then
-  CT_NAME="$VMID"
+if [ -z "$VMID" ] || [ "$VMID" = "auto" ]; then
   VMID=""
-  shift
-else
+  shift || true
+elif [[ "$VMID" =~ ^[0-9]+$ ]]; then
   shift || true
 fi
 
