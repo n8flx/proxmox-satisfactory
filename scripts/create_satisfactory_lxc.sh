@@ -65,13 +65,13 @@ fi
 
 echo "Creating LXC $VMID with hostname $CT_NAME on storage $STORAGE"
 
-# choose a Debian template (prefer debian-12 then debian-11)
+# Choose a Debian template (prefer Debian 13 "Trixie", then Debian 12).
 echo "Updating template index..."
 pveam update >/dev/null
 AVAILABLE_TEMPLATES=$(pveam available | tr -s '[:space:]' '\n' | grep -E '^debian-[0-9]+-standard' || true)
-TEMPLATE=$(printf '%s\n' "$AVAILABLE_TEMPLATES" | grep '^debian-12-standard' | head -n 1 || true)
+TEMPLATE=$(printf '%s\n' "$AVAILABLE_TEMPLATES" | grep '^debian-13-standard' | head -n 1 || true)
 if [ -z "$TEMPLATE" ]; then
-  TEMPLATE=$(printf '%s\n' "$AVAILABLE_TEMPLATES" | grep '^debian-11-standard' | head -n 1 || true)
+  TEMPLATE=$(printf '%s\n' "$AVAILABLE_TEMPLATES" | grep '^debian-12-standard' | head -n 1 || true)
 fi
 if [ -z "$TEMPLATE" ]; then
   # fallback: take first Debian template if output format is different

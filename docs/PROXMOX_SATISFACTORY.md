@@ -55,6 +55,6 @@ Nach der Ausführung:
 
 Hinweis:
 
-- Das Skript versucht, ein aktuelles Debian-Template (Debian 12 bevorzugt) per `pveam` herunterzuladen.
+- Das Skript versucht, Debian 13 (Trixie) zu verwenden und fällt auf Debian 12 (Bookworm) zurück, falls das Trixie-Template nicht verfügbar ist.
 - Die Installation läuft im Container als Benutzer `satisfactory`.
 - Unprivilegierte Container können Einschränkungen haben; das Skript erstellt ein privilegiertes LXC (`--unprivileged 0`).
