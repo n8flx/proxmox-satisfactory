@@ -1,0 +1,11 @@
+[Unit]
+Description=Backup LXC %i via vzdump
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/lxc-backup.sh %i --storage local --dumpdir /var/lib/vz/dump
+Nice=10
+
+[Install]
+WantedBy=multi-user.target

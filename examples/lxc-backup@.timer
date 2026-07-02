@@ -1,0 +1,9 @@
+[Unit]
+Description=Daily timer to run LXC backup for %i
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+
+[Install]
+WantedBy=timers.target

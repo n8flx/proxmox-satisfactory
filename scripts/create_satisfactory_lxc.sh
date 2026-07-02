@@ -32,9 +32,21 @@ fi
 VMID=${1:-}
 CT_NAME=${2:-satisfactory}
 STORAGE=${3:-$DEFAULT_STORAGE}
+NET_BRIDGE=${4:-vmbr0}
+CT_IP=${5:-dhcp} # e.g. 192.168.1.50/24 or 'dhcp'
 
 if [ -z "$VMID" ]; then
   read -rp "Enter VMID (numeric, e.g. 101): " VMID
+fi
+
+if [ -z "$NET_BRIDGE" ]; then
+  read -rp "Enter bridge to use (default vmbr0): " NET_BRIDGE
+  NET_BRIDGE=${NET_BRIDGE:-vmbr0}
+fi
+
+if [ -z "$CT_IP" ]; then
+  read -rp "Enter container IP (e.g. 192.168.1.50/24) or 'dhcp' [dhcp]: " CT_IP
+  CT_IP=${CT_IP:-dhcp}
 fi
 
 if ! [[ "$VMID" =~ ^[0-9]+$ ]]; then
@@ -68,11 +80,19 @@ echo "Downloading template to local storage (if needed)..."
 pveam download local $TEMPLATE
 
 echo "Creating container..."
+
+# build network option
+if [ "$CT_IP" = "dhcp" ] || [ -z "$CT_IP" ]; then
+  NET_OPT="--net0 name=eth0,bridge=$NET_BRIDGE,ip=dhcp"
+else
+  NET_OPT="--net0 name=eth0,bridge=$NET_BRIDGE,ip=$CT_IP"
+fi
+
 pct create "$VMID" local:vztmpl/$TEMPLATE \
   --hostname "$CT_NAME" \
   --cores $DEFAULT_CORES \
   --memory $DEFAULT_MEMORY \
-  --net0 name=eth0,bridge=vmbr0,ip=dhcp \
+  $NET_OPT \
   --rootfs $STORAGE:$DEFAULT_DISK \
   --features nesting=1 \
   --unprivileged 0
