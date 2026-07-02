@@ -6,7 +6,7 @@ source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxV
 # License: MIT | https://github.com/community-scripts/ProxmoxVED/raw/main/LICENSE
 # Source: https://www.satisfactorygame.com/
 
-APP="Satisfactory Dedicated Server"
+APP="Satisfactory"
 var_tags="${var_tags:-gaming;server}"
 var_cpu="${var_cpu:-4}"
 var_ram="${var_ram:-8192}"

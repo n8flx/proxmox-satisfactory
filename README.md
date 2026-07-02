@@ -14,12 +14,32 @@ The files follow the current
 | --- | --- |
 | `ct/satisfactory.sh` | Proxmox host entry point, container defaults and update action |
 | `install/satisfactory-install.sh` | Installation performed inside the LXC |
-| `json/satisfactory.json` | Website and script metadata |
 
 New scripts must first be submitted to the
 [ProxmoxVED development repository](https://github.com/community-scripts/ProxmoxVED).
 They should not be submitted directly to the production `ProxmoxVE`
-repository.
+repository. Website metadata is submitted through the separate site/backend
+workflow and must not be added to the script PR.
+
+The clean submission branch must contain only:
+
+```text
+ct/satisfactory.sh
+install/satisfactory-install.sh
+```
+
+The contribution must be tested from a personal ProxmoxVED fork using the
+official `docs/contribution/setup-fork.sh --full` workflow. Static checks in
+this repository do not replace Default, Advanced and update testing on a real
+Proxmox VE host.
+
+## Publication limitation
+
+The current Community Scripts contribution guide states that new
+closed-source applications are not accepted. Satisfactory and its dedicated
+server are proprietary Steam content, so acceptance requires an explicit
+exception from the Community Scripts maintainers before opening a pull
+request.
 
 ## Defaults
 
@@ -61,8 +81,8 @@ Add the container address in Satisfactory's **Server Manager** using port
 ## Legacy standalone installer
 
 The earlier standalone implementation remains available under
-`scripts/create_satisfactory_lxc.sh`. The files in `ct/`, `install/`, and
-`json/` are the versions intended for a Community Scripts contribution.
+`scripts/create_satisfactory_lxc.sh`. The files in `ct/` and `install/` are
+the versions prepared for a Community Scripts contribution.
 
 ## License
 
