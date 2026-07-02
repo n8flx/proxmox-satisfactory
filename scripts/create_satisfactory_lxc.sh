@@ -9,7 +9,7 @@ set -euo pipefail
 # Defaults
 DEFAULT_CORES=4
 DEFAULT_MEMORY=8192
-DEFAULT_DISK=20G
+DEFAULT_DISK=20
 DEFAULT_STORAGE="local-lvm"
 STEAM_APPID="1690800"
 
@@ -101,7 +101,7 @@ pct create "$VMID" local:vztmpl/$TEMPLATE \
   --cores $DEFAULT_CORES \
   --memory $DEFAULT_MEMORY \
   $NET_OPT \
-  --rootfs $STORAGE:$DEFAULT_DISK \
+  --rootfs "$STORAGE:$DEFAULT_DISK" \
   --features nesting=1 \
   --unprivileged 0
 
