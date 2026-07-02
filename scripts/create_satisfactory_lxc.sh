@@ -15,16 +15,17 @@ STEAM_APPID="1690800"
 
 usage() {
   cat <<EOF
-Usage: $0 VMID [CT_NAME] [STORAGE] [BRIDGE] [IP]
-  VMID     : numeric CT ID (z.B. 101)
+Usage: $0 [VMID|auto] [CT_NAME] [STORAGE] [BRIDGE] [IP]
+  VMID     : optional numeric CT ID (z.B. 101). If omitted or set to auto, the next free ID is used.
   CT_NAME  : hostname / container name (z.B. satisfactory)
   STORAGE  : Proxmox storage name for rootfs (default: $DEFAULT_STORAGE)
   BRIDGE   : bridge interface (default: vmbr0)
   IP       : DHCP or static address (z.B. 192.168.1.50/24)
 
 Example:
+  $0 auto satisfactory local-lvm vmbr0 dhcp
+  $0 satisfactory local-lvm vmbr0 dhcp
   $0 101 satisfactory local-lvm vmbr0 dhcp
-  $0 102 satisfactory local-lvm vmbr0 192.168.1.50/24
 
 The script must be executed on the Proxmox host as root.
 EOF
@@ -32,14 +33,25 @@ EOF
 }
 
 VMID=${1:-}
-CT_NAME=${2:-satisfactory}
-STORAGE=${3:-$DEFAULT_STORAGE}
-NET_BRIDGE=${4:-vmbr0}
-CT_IP=${5:-dhcp} # e.g. 192.168.1.50/24 or 'dhcp'
+if [ -n "$VMID" ] && [[ ! "$VMID" =~ ^[0-9]+$ ]] && [ "$VMID" != "auto" ]; then
+  CT_NAME="$VMID"
+  VMID=""
+  shift
+else
+  shift || true
+fi
 
-if [ -z "$VMID" ]; then
-  echo "Missing VMID." >&2
-  usage
+CT_NAME=${1:-satisfactory}
+STORAGE=${2:-$DEFAULT_STORAGE}
+NET_BRIDGE=${3:-vmbr0}
+CT_IP=${4:-dhcp} # e.g. 192.168.1.50/24 or 'dhcp'
+
+if [ -z "$VMID" ] || [ "$VMID" = "auto" ]; then
+  if command -v pvesh >/dev/null 2>&1; then
+    VMID=$(pvesh get /cluster/nextid)
+  else
+    VMID=$(pct list | tail -n +2 | awk '{print $1}' | sort -n | awk 'BEGIN{next=100} {while($1>next){print next; exit} if($1==next){next++}} END{print next}')
+  fi
 fi
 
 if ! [[ "$VMID" =~ ^[0-9]+$ ]]; then

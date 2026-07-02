@@ -14,28 +14,34 @@ Kurzanleitung:
 cd /pfad/zum/proxmox-satisfactory
 ```
 
-- Führe das Skript als `root` aus:
+- Führe das Skript als `root` aus. Für die nächste freie VMID kannst du `auto` verwenden oder die VMID komplett weglassen:
 
 ```bash
-bash scripts/create_satisfactory_lxc.sh 101 satisfactory local-lvm vmbr0 dhcp
+bash scripts/create_satisfactory_lxc.sh auto satisfactory local-lvm vmbr0 dhcp
+```
+
+oder
+
+```bash
+bash scripts/create_satisfactory_lxc.sh satisfactory local-lvm vmbr0 dhcp
 ```
 
 - Alternativ mit absolutem Repo-Pfad:
 
 ```bash
-bash /pfad/zum/proxmox-satisfactory/scripts/create_satisfactory_lxc.sh 101 satisfactory local-lvm vmbr0 dhcp
+bash /pfad/zum/proxmox-satisfactory/scripts/create_satisfactory_lxc.sh auto satisfactory local-lvm vmbr0 dhcp
 ```
 
 - Oder direkt als Bootstrap-Download:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/n8flx/proxmox-satisfactory/main/bootstrap.sh) 101 satisfactory local-lvm vmbr0 dhcp
+bash <(curl -fsSL https://raw.githubusercontent.com/n8flx/proxmox-satisfactory/main/bootstrap.sh) auto satisfactory local-lvm vmbr0 dhcp
 ```
 
 - Für statische IP:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/n8flx/proxmox-satisfactory/main/bootstrap.sh) 101 satisfactory local-lvm vmbr0 192.168.1.50/24
+bash <(curl -fsSL https://raw.githubusercontent.com/n8flx/proxmox-satisfactory/main/bootstrap.sh) auto satisfactory local-lvm vmbr0 192.168.1.50/24
 ```
 
 - Standard-Netz: `vmbr0` (DHCP) wenn kein IP-Argument angegeben wird.
