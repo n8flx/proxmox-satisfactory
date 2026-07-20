@@ -23,6 +23,7 @@ repository. It:
 - uses `local-lvm` for its 20 GiB root disk and `vmbr0` with DHCP;
 - optionally sets a root password for console login;
 - installs SteamCMD and Satisfactory Dedicated Server App ID `1690800`;
+- runs SteamCMD and the game server as the dedicated unprivileged `steam` user;
 - creates and starts the `satisfactory.service`;
 - enables the update timer and writes logs to both journald and the LXC
   console.
@@ -107,6 +108,9 @@ systemctl status satisfactory
 systemctl restart satisfactory
 journalctl -u satisfactory -f
 ```
+
+The service launches `FactoryServer.sh` as the dedicated `steam` account. Do
+not start the game server manually as `root`.
 
 The game also rotates its own logs below:
 
